@@ -43,7 +43,7 @@ function getEmitter() {
          */
         off: function (event, context) {
             Object.keys(eventsStore).forEach(function (storedEvent) {
-                if (storedEvent === event || storedEvent.indexOf(event + '.') === 0) {
+                if ((storedEvent + '.').split(event + '.').length > 1) {
                     eventsStore[storedEvent] = eventsStore[storedEvent]
                         .filter(function (studentHandler) {
                             return context !== studentHandler.context;
@@ -60,7 +60,7 @@ function getEmitter() {
          * @returns {Object} this
          */
         emit: function (event) {
-            var currentEvent = event.substr(0);
+            var currentEvent = event;
             while (currentEvent) {
                 if (eventsStore.hasOwnProperty(currentEvent)) {
                     eventsStore[currentEvent].forEach(function (studentHandler) {
