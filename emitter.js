@@ -43,7 +43,7 @@ function getEmitter() {
          */
         off: function (event, context) {
             Object.keys(eventsStore).forEach(function (storedEvent) {
-                if ((storedEvent + '.').split(event + '.').length > 1) {
+                if (('.' + storedEvent + '.').split('.' + event + '.').length > 1) {
                     eventsStore[storedEvent] = eventsStore[storedEvent]
                         .filter(function (studentHandler) {
                             return context !== studentHandler.context;
