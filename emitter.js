@@ -45,9 +45,7 @@ function getEmitter() {
             Object.keys(eventsStore).forEach(function (storedEvent) {
                 if ((storedEvent + '.').startsWith(event + '.')) {
                     eventsStore[storedEvent] = eventsStore[storedEvent]
-                        .filter(function (studentHandler) {
-                            return context !== studentHandler.context;
-                        });
+                        .filter(student => context !== student.context);
                 }
             });
 
@@ -60,14 +58,15 @@ function getEmitter() {
          * @returns {Object} this
          */
         emit: function (event) {
-            var currentEvent = event;
-            while (currentEvent) {
+            var events = event.split('.');
+            while (events.length) {
+                var currentEvent = events.join('.');
                 if (eventsStore.hasOwnProperty(currentEvent)) {
-                    eventsStore[currentEvent].forEach(function (studentHandler) {
-                        studentHandler.handler.call(studentHandler.context);
-                    });
+                    eventsStore[currentEvent].forEach(student =>
+                        student.handler.call(student.context)
+                    );
                 }
-                currentEvent = currentEvent.substring(0, currentEvent.lastIndexOf('.'));
+                events.pop();
             }
 
             return this;
